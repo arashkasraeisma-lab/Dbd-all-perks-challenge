@@ -6,44 +6,61 @@
     <title>DbD Ultimate Perk Streak</title>
     <style>
         body { background-color: #0a0a0a; color: #dcdcdc; font-family: 'Courier New', Courier, monospace; text-align: center; padding: 10px; margin: 0; }
-        .container { max-width: 650px; margin: 20px auto; border: 2px solid #444; padding: 15px; background-color: #121212; border-radius: 8px; box-shadow: 0 0 20px rgba(138, 3, 3, 0.6); }
-        h1 { color: #b30000; text-transform: uppercase; font-size: 1.5em; margin-bottom: 10px; text-shadow: 2px 2px #000; }
-        .stats { display: flex; justify-content: space-around; margin-bottom: 20px; }
-        .stat-box { background: #1e1e1e; padding: 8px; border-radius: 4px; border-bottom: 2px solid #b30000; flex: 1; margin: 0 5px; font-size: 0.8em; }
-        .stat-box span { display: block; font-weight: bold; font-size: 1.3em; color: #fff; }
-        .perks-display { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .container { max-width: 500px; margin: 20px auto; border: 2px solid #444; padding: 20px; background-color: #121212; border-radius: 8px; box-shadow: 0 0 20px rgba(138, 3, 3, 0.5); }
+        h1 { color: #b30000; text-transform: uppercase; font-size: 1.4em; margin-bottom: 20px; letter-spacing: 2px; }
+        
+        .stats { display: flex; justify-content: space-around; margin-bottom: 25px; gap: 10px; }
+        .stat-box { background: #1e1e1e; padding: 10px; border-radius: 4px; border-bottom: 3px solid #b30000; flex: 1; }
+        .stat-box label { display: block; font-size: 0.7em; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-box span { display: block; font-weight: bold; font-size: 1.5em; color: #fff; }
+
+        .perks-display { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 20px 0; }
         .perk-card { 
-            background: linear-gradient(145deg, #222, #111);
-            padding: 10px; border-radius: 8px; border: 1px solid #444; 
-            min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #1a1a1a;
+            padding: 15px; 
+            border-radius: 4px; 
+            border: 1px solid #333; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            min-height: 40px;
         }
-        .perk-card img { width: 90px; height: 90px; margin-bottom: 8px; filter: drop-shadow(0 0 5px #000); }
-        .perk-name { font-weight: bold; color: #ff9d00; font-size: 0.75em; text-transform: uppercase; min-height: 2em; display: flex; align-items: center; justify-content: center; }
-        button { width: 100%; padding: 15px; margin: 5px 0; border: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
-        .btn-gen { background-color: #b30000; color: white; }
+        .perk-name { font-weight: bold; color: #ff9d00; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .placeholder { color: #444; font-style: italic; }
+
+        .controls { display: flex; flex-direction: column; gap: 10px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+        .btn-gen { background-color: #b30000; color: white; font-size: 1em; }
         .btn-win { background-color: #2e7d32; color: white; }
-        .btn-loss { background-color: #444; color: #ccc; font-size: 0.8em; }
-        button:disabled { background-color: #333 !important; color: #666 !important; cursor: not-allowed; }
-        .reset-link { color: #555; text-decoration: underline; font-size: 0.7em; cursor: pointer; margin-top: 20px; display: block; }
+        .btn-loss { background-color: #333; color: #999; font-size: 0.8em; }
+        button:disabled { background-color: #1a1a1a !important; color: #444 !important; cursor: not-allowed; border: 1px solid #222; }
+        
+        .reset-link { color: #444; text-decoration: underline; font-size: 0.7em; cursor: pointer; margin-top: 25px; display: inline-block; }
+        .reset-link:hover { color: #b30000; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Perk Streak Challenge</h1>
+    <h1>Perk Streak</h1>
+    
     <div class="stats">
-        <div class="stat-box">Streak <span id="streak">0</span></div>
-        <div class="stat-box">Checkpoint <span id="checkpoint">0</span></div>
-        <div class="stat-box">Remaining <span id="remaining">0</span></div>
+        <div class="stat-box"><label>Streak</label><span id="streak">0</span></div>
+        <div class="stat-box"><label>Checkpoint</label><span id="checkpoint">0</span></div>
+        <div class="stat-box"><label>Remaining</label><span id="remaining">0</span></div>
     </div>
+
     <div id="perk-display" class="perks-display">
-        <div class="perk-card">?</div><div class="perk-card">?</div>
-        <div class="perk-card">?</div><div class="perk-card">?</div>
+        <div class="perk-card"><span class="placeholder">Ready to roll...</span></div>
     </div>
-    <button class="btn-gen" id="btn-generate" onclick="generatePerks()">Roll Perks</button>
-    <button class="btn-win" id="btn-win" onclick="handleWin()" disabled>Confirm Win</button>
-    <button class="btn-loss" id="btn-loss" onclick="handleLoss()">Loss (Back to Checkpoint)</button>
-    <span class="reset-link" onclick="fullReset()">Full Reset Challenge</span>
+
+    <div class="controls">
+        <button class="btn-gen" id="btn-generate" onclick="generatePerks()">Roll Perks</button>
+        <button class="btn-win" id="btn-win" onclick="handleWin()" disabled>Confirm Win</button>
+        <button class="btn-loss" id="btn-loss" onclick="handleLoss()">Loss (Back to Checkpoint)</button>
+    </div>
+    
+    <span class="reset-link" onclick="fullReset()">Full Challenge Reset</span>
 </div>
 
 <script>
@@ -55,44 +72,39 @@
     let streak = 0;
     let checkpoint = 0;
 
-    const savedData = JSON.parse(localStorage.getItem('dbd_streak_v11'));
+    const savedData = JSON.parse(localStorage.getItem('dbd_streak_eng_clean'));
     if (savedData) {
-        streak = savedData.streak;
-        checkpoint = savedData.checkpoint;
-        availablePerks = savedData.availablePerks;
+        streak = savedData.streak || 0;
+        checkpoint = savedData.checkpoint || 0;
+        availablePerks = savedData.availablePerks || [...allPerks];
         usedPerksHistory = savedData.usedPerksHistory || [];
-    }
-
-    function getPerkImgUrl(perkName) {
-        let name = perkName.replace(/ /g, "_").replace(/:/g, "").replace(/'/g, "");
-        if(name === "Deja_Vu") name = "DejaVu";
-        return `https://www.dbd.tricky.lol/assets/perks/${name}.png`;
     }
 
     function updateUI() {
         document.getElementById('streak').innerText = streak;
         document.getElementById('checkpoint').innerText = checkpoint;
         document.getElementById('remaining').innerText = availablePerks.length;
-        localStorage.setItem('dbd_streak_v11', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
+        localStorage.setItem('dbd_streak_eng_clean', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
     }
 
     function generatePerks() {
+        if (availablePerks.length < 4) {
+            alert("Not enough perks remaining!");
+            return;
+        }
         currentPerks = [];
         let tempPool = [...availablePerks];
-        let toRoll = Math.min(4, tempPool.length);
-        for (let i = 0; i < toRoll; i++) {
+        for (let i = 0; i < 4; i++) {
             const idx = Math.floor(Math.random() * tempPool.length);
             currentPerks.push(tempPool.splice(idx, 1)[0]);
         }
+        
         const display = document.getElementById('perk-display');
         display.innerHTML = '';
         currentPerks.forEach(p => {
-            display.innerHTML += `
-                <div class="perk-card">
-                    <img src="${getPerkImgUrl(p)}" onerror="this.src='https://www.dbd.tricky.lol/assets/perks/None.png'">
-                    <div class="perk-name">${p}</div>
-                </div>`;
+            display.innerHTML += `<div class="perk-card"><div class="perk-name">${p}</div></div>`;
         });
+        
         document.getElementById('btn-win').disabled = false;
         document.getElementById('btn-generate').disabled = true;
     }
@@ -101,16 +113,20 @@
         usedPerksHistory.push({ atStreak: streak + 1, perks: [...currentPerks] });
         availablePerks = availablePerks.filter(p => !currentPerks.includes(p));
         streak++;
-        if (streak >= 24) checkpoint = 24; else if (streak >= 12) checkpoint = 12;
+        
+        if (streak >= 24) checkpoint = 24;
+        else if (streak >= 12) checkpoint = 12;
+        
         resetRound();
         updateUI();
     }
 
     function handleLoss() {
-        if (confirm("Tornare al checkpoint " + checkpoint + "?")) {
-            const restore = usedPerksHistory.filter(h => h.atStreak > checkpoint).flatMap(h => h.perks);
-            availablePerks = [...new Set([...availablePerks, ...restore])];
+        if (confirm("Resetting to checkpoint: " + checkpoint + "?")) {
+            const toRestore = usedPerksHistory.filter(h => h.atStreak > checkpoint).flatMap(h => h.perks);
+            availablePerks = [...new Set([...availablePerks, ...toRestore])];
             usedPerksHistory = usedPerksHistory.filter(h => h.atStreak <= checkpoint);
+            
             streak = checkpoint;
             resetRound();
             updateUI();
@@ -118,14 +134,14 @@
     }
 
     function resetRound() {
-        document.getElementById('perk-display').innerHTML = '<div class="perk-card">?</div>'.repeat(4);
+        document.getElementById('perk-display').innerHTML = '<div class="perk-card"><span class="placeholder">Ready to roll...</span></div>';
         document.getElementById('btn-win').disabled = true;
         document.getElementById('btn-generate').disabled = false;
     }
 
     function fullReset() {
-        if (confirm("Vuoi resettare tutto da zero?")) {
-            localStorage.removeItem('dbd_streak_v11');
+        if (confirm("Are you sure? This will wipe all your progress!")) {
+            localStorage.removeItem('dbd_streak_eng_clean');
             location.reload();
         }
     }
