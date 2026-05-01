@@ -17,8 +17,8 @@
             padding: 10px; border-radius: 8px; border: 1px solid #444; 
             min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        .perk-card img { width: 100px; height: 100px; margin-bottom: 8px; filter: drop-shadow(0 0 5px #000); }
-        .perk-name { font-weight: bold; color: #ff9d00; font-size: 0.75em; text-transform: uppercase; min-height: 2em; display: flex; align-items: center; }
+        .perk-card img { width: 90px; height: 90px; margin-bottom: 8px; filter: drop-shadow(0 0 5px #000); }
+        .perk-name { font-weight: bold; color: #ff9d00; font-size: 0.75em; text-transform: uppercase; min-height: 2em; display: flex; align-items: center; justify-content: center; }
         button { width: 100%; padding: 15px; margin: 5px 0; border: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
         .btn-gen { background-color: #b30000; color: white; }
         .btn-win { background-color: #2e7d32; color: white; }
@@ -36,21 +36,18 @@
         <div class="stat-box">Checkpoint <span id="checkpoint">0</span></div>
         <div class="stat-box">Remaining <span id="remaining">0</span></div>
     </div>
-    <div class="perks-display" id="perk-display">
+    <div id="perk-display" class="perks-display">
         <div class="perk-card">?</div><div class="perk-card">?</div>
         <div class="perk-card">?</div><div class="perk-card">?</div>
     </div>
     <button class="btn-gen" id="btn-generate" onclick="generatePerks()">Roll Perks</button>
     <button class="btn-win" id="btn-win" onclick="handleWin()" disabled>Confirm Win</button>
     <button class="btn-loss" id="btn-loss" onclick="handleLoss()">Loss (Back to Checkpoint)</button>
-    
     <span class="reset-link" onclick="fullReset()">Full Reset Challenge</span>
 </div>
 
 <script>
-    const allPerks = [
-        "Ace in the Hole", "Adrenaline", "Aftercare", "Alert", "Any Means Necessary", "Appraisal", "Autodidact", "Babysitter", "Balanced Landing", "Bardic Inspiration", "Beacon of Hope", "Better Together", "Better than New", "Bite the Bullet", "Blast Mine", "Blood Pact", "Blood Rush", "Boil Over", "Bond", "Boon: Circle of Healing", "Boon: Dark Theory", "Boon: Exponential", "Boon: Illumination", "Boon: Shadow Step", "Borrowed Time", "Botany Knowledge", "Breakdown", "Breakout", "Buckle Up", "Built to Last", "Calm Spirit", "Champion of Light", "Checkmate", "Chemical Trap", "Clairvoyance", "Corrective Action", "Counterforce", "Cut Loose", "Dark Sense", "Dead Hard", "Deception", "Decisive Strike", "Deliverance", "Desperate Measures", "Detective's Hunch", "Distortion", "Diversion", "Deja Vu", "Dramaturgy", "Empathy", "Fast Track", "Deadline", "Empowerment", "Inner Strength", "Fixated", "Flashbang", "Flip-Flop", "Fogwise", "For the People", "Friendly Competition", "Guardian", "Hardened", "Head On", "Hope", "Hyperfocus", "Inner Focus", "Invocation: Weaving Spiders", "Iron Will", "Kindred", "Leader", "Left Behind", "Lightweight", "Lithe", "Low Profile", "Lucky Break", "Lucky Star", "Made for This", "Mettle of Man", "Mirrored Illusion", "No Mither", "No One Left Behind", "Object of Obsession", "Off the Record", "Open-Handed", "Overcome", "Overzealous", "Parental Guidance", "Partnership", "Pharmacy", "Plunderer's Instinct", "Poised", "Potential Energy", "Power Struggle", "Premonition", "Projector", "Prove Thyself", "Quick & Quiet", "Quick Gambit", "Reactive Healing", "Reassurance", "Red Herring", "Renewal", "Repressed Alliance", "Residual Manifest", "Resilience", "Rookie Spirit", "Saboteur", "Scavenger", "Scene Partner", "Self-Care", "Self-Preservation", "Slippery Meat", "Small Game", "Smash Hit", "Sole Survivor", "Solidarity", "Soul Guard", "Spine Chill", "Sprint Burst", "Stake Out", "Static Cling", "Streetwise", "Strength in Shadows", "Stunner", "Swift Attack", "Tactician", "Technician", "Tenacity", "This Is Not Happening", "Troubleshooter", "Up the Ante", "Urban Evasion", "Unbreakable", "Vigil", "Visionary", "Wake Up!", "We're Gonna Live Forever", "Wicked", "Windows of Opportunity", "Wiretap", "Witness", "We'll Make It", "You're Next", "Eyes of Belmont", "Exultation", "Momentum", "Hardiness", "Finesse", "Specialist"
-    ];
+    const allPerks = ["Ace in the Hole", "Adrenaline", "Aftercare", "Alert", "Any Means Necessary", "Appraisal", "Autodidact", "Babysitter", "Balanced Landing", "Bardic Inspiration", "Beacon of Hope", "Better Together", "Better than New", "Bite the Bullet", "Blast Mine", "Blood Pact", "Blood Rush", "Boil Over", "Bond", "Boon: Circle of Healing", "Boon: Dark Theory", "Boon: Exponential", "Boon: Illumination", "Boon: Shadow Step", "Borrowed Time", "Botany Knowledge", "Breakdown", "Breakout", "Buckle Up", "Built to Last", "Calm Spirit", "Champion of Light", "Checkmate", "Chemical Trap", "Clairvoyance", "Corrective Action", "Counterforce", "Cut Loose", "Dark Sense", "Dead Hard", "Deception", "Decisive Strike", "Deliverance", "Desperate Measures", "Detective's Hunch", "Distortion", "Diversion", "Deja Vu", "Dramaturgy", "Empathy", "Fast Track", "Deadline", "Empowerment", "Inner Strength", "Fixated", "Flashbang", "Flip-Flop", "Fogwise", "For the People", "Friendly Competition", "Guardian", "Hardened", "Head On", "Hope", "Hyperfocus", "Inner Focus", "Invocation: Weaving Spiders", "Iron Will", "Kindred", "Leader", "Left Behind", "Lightweight", "Lithe", "Low Profile", "Lucky Break", "Lucky Star", "Made for This", "Mettle of Man", "Mirrored Illusion", "No Mither", "No One Left Behind", "Object of Obsession", "Off the Record", "Open-Handed", "Overcome", "Overzealous", "Parental Guidance", "Partnership", "Pharmacy", "Plunderer's Instinct", "Poised", "Potential Energy", "Power Struggle", "Premonition", "Projector", "Prove Thyself", "Quick & Quiet", "Quick Gambit", "Reactive Healing", "Reassurance", "Red Herring", "Renewal", "Repressed Alliance", "Residual Manifest", "Resilience", "Rookie Spirit", "Saboteur", "Scavenger", "Scene Partner", "Self-Care", "Self-Preservation", "Slippery Meat", "Small Game", "Smash Hit", "Sole Survivor", "Solidarity", "Soul Guard", "Spine Chill", "Sprint Burst", "Stake Out", "Static Cling", "Streetwise", "Strength in Shadows", "Stunner", "Swift Attack", "Tactician", "Technician", "Tenacity", "This Is Not Happening", "Troubleshooter", "Up the Ante", "Urban Evasion", "Unbreakable", "Vigil", "Visionary", "Wake Up!", "We're Gonna Live Forever", "Wicked", "Windows of Opportunity", "Wiretap", "Witness", "We'll Make It", "You're Next", "Eyes of Belmont", "Exultation", "Momentum", "Hardiness", "Finesse", "Specialist"];
 
     let availablePerks = [...allPerks];
     let usedPerksHistory = [];
@@ -58,7 +55,7 @@
     let streak = 0;
     let checkpoint = 0;
 
-    const savedData = JSON.parse(localStorage.getItem('dbd_streak_v9'));
+    const savedData = JSON.parse(localStorage.getItem('dbd_streak_v11'));
     if (savedData) {
         streak = savedData.streak;
         checkpoint = savedData.checkpoint;
@@ -67,17 +64,16 @@
     }
 
     function getPerkImgUrl(perkName) {
-        // Logica migliorata per i nomi file delle icone
-        let cleanName = perkName.replace(/ /g, "").replace(/:/g, "").replace(/'/g, "").replace(/&/g, "And");
-        if(cleanName === "DejaVu") cleanName = "Deja_Vu";
-        return `https://raw.githubusercontent.com/skandog/dbd-perk-icons/master/IconPerks_${cleanName}.png`;
+        let name = perkName.replace(/ /g, "_").replace(/:/g, "").replace(/'/g, "");
+        if(name === "Deja_Vu") name = "DejaVu";
+        return `https://www.dbd.tricky.lol/assets/perks/${name}.png`;
     }
 
     function updateUI() {
         document.getElementById('streak').innerText = streak;
         document.getElementById('checkpoint').innerText = checkpoint;
         document.getElementById('remaining').innerText = availablePerks.length;
-        localStorage.setItem('dbd_streak_v9', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
+        localStorage.setItem('dbd_streak_v11', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
     }
 
     function generatePerks() {
@@ -93,7 +89,7 @@
         currentPerks.forEach(p => {
             display.innerHTML += `
                 <div class="perk-card">
-                    <img src="${getPerkImgUrl(p)}" onerror="this.src='https://raw.githubusercontent.com/skandog/dbd-perk-icons/master/IconPerks_empty.png'">
+                    <img src="${getPerkImgUrl(p)}" onerror="this.src='https://www.dbd.tricky.lol/assets/perks/None.png'">
                     <div class="perk-name">${p}</div>
                 </div>`;
         });
@@ -111,7 +107,7 @@
     }
 
     function handleLoss() {
-        if (confirm("Reset to checkpoint " + checkpoint + "?")) {
+        if (confirm("Tornare al checkpoint " + checkpoint + "?")) {
             const restore = usedPerksHistory.filter(h => h.atStreak > checkpoint).flatMap(h => h.perks);
             availablePerks = [...new Set([...availablePerks, ...restore])];
             usedPerksHistory = usedPerksHistory.filter(h => h.atStreak <= checkpoint);
@@ -128,8 +124,8 @@
     }
 
     function fullReset() {
-        if (confirm("Are you sure? This will wipe all progress!")) {
-            localStorage.removeItem('dbd_streak_v9');
+        if (confirm("Vuoi resettare tutto da zero?")) {
+            localStorage.removeItem('dbd_streak_v11');
             location.reload();
         }
     }
