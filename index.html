@@ -24,6 +24,7 @@
         .btn-win { background-color: #2e7d32; color: white; }
         .btn-loss { background-color: #444; color: #ccc; font-size: 0.8em; }
         button:disabled { background-color: #333 !important; color: #666 !important; cursor: not-allowed; }
+        .reset-link { color: #555; text-decoration: underline; font-size: 0.7em; cursor: pointer; margin-top: 20px; display: block; }
     </style>
 </head>
 <body>
@@ -42,6 +43,8 @@
     <button class="btn-gen" id="btn-generate" onclick="generatePerks()">Roll Perks</button>
     <button class="btn-win" id="btn-win" onclick="handleWin()" disabled>Confirm Win</button>
     <button class="btn-loss" id="btn-loss" onclick="handleLoss()">Loss (Back to Checkpoint)</button>
+    
+    <span class="reset-link" onclick="fullReset()">Full Reset Challenge</span>
 </div>
 
 <script>
@@ -55,7 +58,7 @@
     let streak = 0;
     let checkpoint = 0;
 
-    const savedData = JSON.parse(localStorage.getItem('dbd_streak_v8'));
+    const savedData = JSON.parse(localStorage.getItem('dbd_streak_v9'));
     if (savedData) {
         streak = savedData.streak;
         checkpoint = savedData.checkpoint;
@@ -64,16 +67,17 @@
     }
 
     function getPerkImgUrl(perkName) {
-        let name = perkName.replace(/ /g, "").replace(/:/g, "").replace(/'/g, "").replace(/&/g, "And");
-        if(name === "DejaVu") name = "Deja_Vu";
-        return `https://raw.githubusercontent.com/skandog/dbd-perk-icons/master/IconPerks_${name}.png`;
+        // Logica migliorata per i nomi file delle icone
+        let cleanName = perkName.replace(/ /g, "").replace(/:/g, "").replace(/'/g, "").replace(/&/g, "And");
+        if(cleanName === "DejaVu") cleanName = "Deja_Vu";
+        return `https://raw.githubusercontent.com/skandog/dbd-perk-icons/master/IconPerks_${cleanName}.png`;
     }
 
     function updateUI() {
         document.getElementById('streak').innerText = streak;
         document.getElementById('checkpoint').innerText = checkpoint;
         document.getElementById('remaining').innerText = availablePerks.length;
-        localStorage.setItem('dbd_streak_v8', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
+        localStorage.setItem('dbd_streak_v9', JSON.stringify({ streak, checkpoint, availablePerks, usedPerksHistory }));
     }
 
     function generatePerks() {
@@ -121,6 +125,13 @@
         document.getElementById('perk-display').innerHTML = '<div class="perk-card">?</div>'.repeat(4);
         document.getElementById('btn-win').disabled = true;
         document.getElementById('btn-generate').disabled = false;
+    }
+
+    function fullReset() {
+        if (confirm("Are you sure? This will wipe all progress!")) {
+            localStorage.removeItem('dbd_streak_v9');
+            location.reload();
+        }
     }
 
     updateUI();
